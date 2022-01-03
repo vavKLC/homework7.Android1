@@ -22,9 +22,11 @@ public class AdapterText extends RecyclerView.Adapter<AdapterText.HolderText>{
     TextModel textModel;
     OnItemClickListener onItemClickListener;
 
-    public AdapterText(ArrayList<TextModel> text, TextModel textModel, OnItemClickListener onItemClickListener) {
+    public AdapterText(ArrayList<TextModel> text) {
         this.text = text;
-        this.textModel = textModel;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -40,7 +42,8 @@ public class AdapterText extends RecyclerView.Adapter<AdapterText.HolderText>{
     }
 
     public void setText(TextModel textModel){
-        text.add(this.textModel);
+        text.add(textModel);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -61,7 +64,7 @@ public class AdapterText extends RecyclerView.Adapter<AdapterText.HolderText>{
                  @Override
                  public void onClick(View view) {
                      int position = getAdapterPosition();
-                     onItemClickListener.OnItemClick(text.get(position));
+                     onItemClickListener.OnItemClick(textModel);
                  }
              });
         }
