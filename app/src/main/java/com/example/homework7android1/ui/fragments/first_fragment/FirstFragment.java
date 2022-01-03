@@ -1,5 +1,6 @@
 package com.example.homework7android1.ui.fragments.first_fragment;
 
+import android.location.SettingInjectorService;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,47 +23,61 @@ import com.example.homework7android1.ui.fragments.second_fragment.SecondFragment
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 
 public class FirstFragment extends Fragment {
     private FragmentFirstBinding binding;
     ArrayList<TextModel> text = new ArrayList<>();
     TextModel textModel;
-    AdapterText adapterText;
+    AdapterText adapterText = new AdapterText(text);
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentFirstBinding.inflate(inflater , container , false);
+        binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getData();
+        adapterText = new AdapterText(text);
+        binding.recyclerView.setAdapter(adapterText);
         setupSecondFragment();
+        getData();
+        setData();
 
     }
 
 
-    private void getData() {
-        if (getArguments() != null){
-            textModel = (TextModel) getArguments().getSerializable("key");
-            adapterText.setText(textModel);
-
-        }
-    }
     private void setupSecondFragment() {
         binding.btnButtonFr1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = text.toString();
-                TextModel textModel = new TextModel(s);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("key" , textModel);
-                Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_secondFragment,bundle) ;
+                Navigation.findNavController(view).navigate(R.id.action_firstFragment_to_secondFragment);
             }
         });
     }
 
+    private void getData() {
+        String s = textModel.getTextInput();
+        TextModel textModel = new TextModel(s);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("key1", textModel);
+        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_firstFragment_to_secondFragment, bundle);
     }
+
+    private void setData() {
+        if (getArguments() != null) {
+            textModel = (TextModel) getArguments().getSerializable("key");
+            adapterText.setText(textModel);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+}

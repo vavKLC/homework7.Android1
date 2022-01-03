@@ -49,7 +49,7 @@ public class SecondFragment extends Fragment {
 
     private void getData() {
         if (getArguments() != null){
-            textModel = (TextModel) getArguments().get("key");
+            textModel = (TextModel) getArguments().get("key1");
             binding.etText.setText(textModel.getTextInput());
         }
     }
